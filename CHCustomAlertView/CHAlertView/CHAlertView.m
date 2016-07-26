@@ -8,7 +8,7 @@
 
 #import "CHAlertView.h"
 
-@interface CHAlertView ()
+@interface CHAlertView ()<UIAlertViewDelegate>
 @property (nonatomic,strong)id alertItem;
 
 @end
@@ -29,13 +29,19 @@
     }
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self.delegate AlertView:self didClickButtonAtIndex:buttonIndex];
+}
+
 + (instancetype)createAlertViewWithTitle:(NSString *)title message:(NSString *)message
                                 delegate:(id)delegate cancelButtonTitle:(nullable NSString *)cancelButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ...
 {
     CHAlertView *alertview = [[CHAlertView alloc]init];
+    alertview.delegate = delegate;
     
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
-        alertview.alertItem = [[UIAlertView alloc]initWithTitle:title message:message delegate:delegate cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil, nil];
+        alertview.alertItem = [[UIAlertView alloc]initWithTitle:title message:message delegate:alertview cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil, nil];
         
         va_list args;
         va_start(args, otherButtonTitles);
@@ -54,9 +60,13 @@
     else
     {
         alertview.alertItem = [UIAlertController alertControllerWithTitle:title  message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alertController = alertview.alertItem;
+        
         if (cancelButtonTitle) {
             UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault
-                                                                 handler:^(UIAlertAction * action) {}];
+                                                                 handler:^(UIAlertAction * action) {
+                                                                  [alertview.delegate AlertView:alertview didClickButtonAtIndex:[alertController.actions indexOfObject:action]];
+                                                                 }];
             [alertview.alertItem addAction:cancelAction];
         }
 
@@ -66,6 +76,7 @@
         {
             UIAlertAction* okAction = [UIAlertAction actionWithTitle:otherButtonTitles style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction * action) {
+                                                                 [alertview.delegate AlertView:alertview didClickButtonAtIndex:[alertController.actions indexOfObject:action]];
                                                               }];
             [alertview.alertItem addAction:okAction];
 
@@ -75,6 +86,7 @@
             {
                 UIAlertAction* okAction2 = [UIAlertAction actionWithTitle:otherString style:UIAlertActionStyleDefault
                                                                  handler:^(UIAlertAction * action) {
+                                                                      [alertview.delegate AlertView:alertview didClickButtonAtIndex:[alertController.actions indexOfObject:action]];
                                                                   }];
                 [alertview.alertItem addAction:okAction2];
             }

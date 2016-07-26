@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "CHAlertView.h"
 
-@interface ViewController ()
+@interface ViewController ()<CHAlertViewDelegate>
 
 @end
 
@@ -19,7 +19,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    alertview  = [CHAlertView createAlertViewWithTitle:@"title" message:@"message" delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles:@"other1",@"other2",nil];
+    alertview  = [CHAlertView createAlertViewWithTitle:@"title" message:@"message" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"other1",@"other2",nil];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -32,6 +32,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)AlertView:(CHAlertView *)alertview didClickButtonAtIndex:(NSInteger)index
+{
+    NSLog(@"-----%ld",(long)index);
 }
 
 @end
