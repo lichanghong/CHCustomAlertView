@@ -19,8 +19,12 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    alertview  = [CHAlertView createAlertViewWithTitle:@"title" message:@"message" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"other1",@"other2",nil];
+    alertview  = [CHAlertView createAlertViewWithTitle:@"title" message:@"message" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"other1",@"other2",@"other3",@"other4",nil];
     // Do any additional setup after loading the view, typically from a nib.
+}
+- (void)AlertView:(CHAlertView *)alertview didClickButtonAtIndex:(NSInteger)index
+{
+    NSLog(@"-----%ld",(long)index);
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -34,9 +38,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)AlertView:(CHAlertView *)alertview didClickButtonAtIndex:(NSInteger)index
-{
-    NSLog(@"-----%ld",(long)index);
-}
 
 @end
