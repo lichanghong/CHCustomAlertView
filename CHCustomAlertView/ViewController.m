@@ -25,8 +25,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [CHAlertView show:alertview Controller:self];
-    
+//    [CHAlertView show:alertview Controller:self];
+    [alertview showInController:self];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -9,53 +9,55 @@
 #import "CHAlertView.h"
 
 @interface CHAlertView ()
+@property (nonatomic,strong)id alertItem;
 
 @end
 
 @implementation CHAlertView
- 
 
-+ (void)show:(id)sender Controller:(UIViewController *)controller
+ 
+- (void)showInController:(UIViewController *)controller
 {
+    CHAlertView *sender = self;
     if ([sender isKindOfClass:[UIAlertView class]]) {
-        [sender show];
+        [sender.alertItem show];
     }
     else
     {
-        [controller presentViewController:sender animated:NO completion:^{
+        [controller presentViewController:sender.alertItem animated:NO completion:^{
         }];
     }
 }
 
-
 + (instancetype)createAlertViewWithTitle:(NSString *)title message:(NSString *)message
                                 delegate:(id)delegate cancelButtonTitle:(nullable NSString *)cancelButtonTitle otherButtonTitles:(nullable NSString *)otherButtonTitles, ...
 {
-    id _cameraAlert=nil;
+    CHAlertView *alertview = [[CHAlertView alloc]init];
+    
     if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
-        _cameraAlert = [[UIAlertView alloc]initWithTitle:title message:message delegate:delegate cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil, nil];
+        alertview.alertItem = [[UIAlertView alloc]initWithTitle:title message:message delegate:delegate cancelButtonTitle:cancelButtonTitle otherButtonTitles:nil, nil];
         
         va_list args;
         va_start(args, otherButtonTitles);
         if (otherButtonTitles)
         {
-            [_cameraAlert addButtonWithTitle:otherButtonTitles];
+            [alertview.alertItem addButtonWithTitle:otherButtonTitles];
             
             NSString *otherString;
             while ((otherString = va_arg(args, NSString *)))
             {
-                [_cameraAlert addButtonWithTitle:otherString];
+                [alertview.alertItem addButtonWithTitle:otherString];
             }
         }
         va_end(args);
     }
     else
     {
-        _cameraAlert = [UIAlertController alertControllerWithTitle:title  message:message preferredStyle:UIAlertControllerStyleAlert];
+        alertview.alertItem = [UIAlertController alertControllerWithTitle:title  message:message preferredStyle:UIAlertControllerStyleAlert];
         if (cancelButtonTitle) {
             UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault
                                                                  handler:^(UIAlertAction * action) {}];
-            [_cameraAlert addAction:cancelAction];
+            [alertview.alertItem addAction:cancelAction];
         }
 
         va_list args;
@@ -65,7 +67,7 @@
             UIAlertAction* okAction = [UIAlertAction actionWithTitle:otherButtonTitles style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction * action) {
                                                               }];
-            [_cameraAlert addAction:okAction];
+            [alertview.alertItem addAction:okAction];
 
             
             NSString *otherString;
@@ -74,12 +76,12 @@
                 UIAlertAction* okAction2 = [UIAlertAction actionWithTitle:otherString style:UIAlertActionStyleDefault
                                                                  handler:^(UIAlertAction * action) {
                                                                   }];
-                [_cameraAlert addAction:okAction2];
+                [alertview.alertItem addAction:okAction2];
             }
         } 
         va_end(args);
     }
-    return _cameraAlert;
+    return alertview;
 }
 
 @end

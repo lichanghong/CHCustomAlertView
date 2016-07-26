@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CHAlertView : NSObject
+@interface CHAlertView : UIView
 
 + (instancetype)createAlertViewWithTitle:(NSString *)title
                                  message:(NSString *)message
@@ -17,6 +17,8 @@
                        otherButtonTitles:(NSString *)otherButtonTitles, ...;
 
 
-+ (void)show:(id)sender Controller:(UIViewController *)controller;
+- (void)showInController:(UIViewController *)controller;
+
+
 
 @end
